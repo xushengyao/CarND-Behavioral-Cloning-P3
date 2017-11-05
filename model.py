@@ -47,7 +47,7 @@ def augment_picture(images,angles):
         augmented_images.append(cv2.flip(image,1))
         augmented_angles.append(angle*-1.0)
         #image = randomise_brightness(image)
-        image, angle = translation_augment(image, angle)
+        image, angle = translation_augment(image, angle) #translation augment
         augmented_images.append(image)
         augmented_angles.append(angle)
         augmented_images.append(cv2.flip(image,1))
@@ -95,7 +95,6 @@ ch, row, col = 3, 160, 320  # Trimmed image format
 model = Sequential()
 # Preprocess incoming data, centered around zero with small standard deviation
 
-#model.add(Lambda(lambda x: x/127.5 - 1., input_shape=(160,320,3)))
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((70,25), (0,0))))
 model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
@@ -104,7 +103,7 @@ model.add(Convolution2D(48,5,5,subsample=(2,2),activation="relu"))
 model.add(Convolution2D(64,3,3,activation="relu"))
 model.add(Convolution2D(64,3,3,activation="relu"))
 model.add(Flatten())
-model.add(Dropout(0.7))
+model.add(Dropout(0.7)) #add Dropout
 model.add(Dense(100))
 model.add(Dropout(0.7))
 model.add(Dense(50))
@@ -115,7 +114,7 @@ model.compile(loss='mse', optimizer='adam')
 history_object  = model.fit_generator(train_generator, samples_per_epoch= \
             len(train_samples), validation_data=validation_generator, \
             nb_val_samples=len(validation_samples), nb_epoch=10)
-model.save('model6.h5')
+model.save('model.h5')
 
 ### print the keys contained in the history object
 print(history_object.history.keys())
