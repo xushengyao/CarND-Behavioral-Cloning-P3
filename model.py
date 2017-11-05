@@ -65,7 +65,7 @@ def generator(lines, batch_size=32):
             images, angles = [], []
             for batch_sample in batch_samples:
                 center_angle = float(batch_sample[3])
-                correction = 0.3
+                correction = 0.275
                 left_angle = center_angle + correction
                 right_angle = center_angle - correction
                 center_name = './data/IMG/'+batch_sample[0].split('/')[-1]
@@ -114,8 +114,8 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 history_object  = model.fit_generator(train_generator, samples_per_epoch= \
             len(train_samples), validation_data=validation_generator, \
-            nb_val_samples=len(validation_samples), nb_epoch=8)
-model.save('model.h5')
+            nb_val_samples=len(validation_samples), nb_epoch=10)
+model.save('model6.h5')
 
 ### print the keys contained in the history object
 print(history_object.history.keys())
