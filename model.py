@@ -46,7 +46,7 @@ def augment_picture(images,angles):
         augmented_angles.append(angle)
         augmented_images.append(cv2.flip(image,1))
         augmented_angles.append(angle*-1.0)
-        #image = randomise_brightness(image)
+        image = randomise_brightness(image)
         image, angle = translation_augment(image, angle) #translation augment
         augmented_images.append(image)
         augmented_angles.append(angle)
@@ -74,11 +74,11 @@ def generator(lines, batch_size=32):
                 center_image = cv2.imread(center_name)
                 left_image = cv2.imread(left_name)
                 right_image = cv2.imread(right_name)
-                images.append(center_image)
+                images.append(cv2.cvtColor(center_image, cv2.COLOR_BGR2RGB))
                 angles.append(center_angle)
-                images.append(left_image)
+                images.append(cv2.cvtColor(left_image, cv2.COLOR_BGR2RGB))
                 angles.append(left_angle)
-                images.append(right_image)
+                images.append(cv2.cvtColor(right_image, cv2.COLOR_BGR2RGB))
                 angles.append(right_angle)
             # trim image to only see section with road
             augmented_images, augmented_angles = augment_picture(images,angles)
@@ -89,12 +89,8 @@ def generator(lines, batch_size=32):
 # compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=32)
 validation_generator = generator(validation_samples, batch_size=32)
-
-ch, row, col = 3, 160, 320  # Trimmed image format
-
 model = Sequential()
 # Preprocess incoming data, centered around zero with small standard deviation
-
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((70,25), (0,0))))
 model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
