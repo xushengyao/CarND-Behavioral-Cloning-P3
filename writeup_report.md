@@ -23,7 +23,9 @@ The goals / steps of this project are the following:
 [image6]: ./images/center_reverse.jpg "reverse Image"
 [image7]: ./images/before_flip.png "Flipped Image"
 [image8]: ./images/after_flip.png "Flipped Image"
-[image9]: ./images/MSE.png "MSE"
+[image9]: ./images/before_augment.png "Augmented Image"
+[image10]: ./images/after_augment.png "Augmented Image"
+[image11]: ./images/MSE.png "MSE"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -82,17 +84,17 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The overall strategy for deriving a model architecture was pick some widely being used neural network models to start.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because it has been used for
+My first step was to use a previously used neural network: LeNet to try. While, I found out I could not reduce the MSE a lot and then switched the Nividia model, which has been used for Nvidia's self driving car project.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting.
+In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model performs very well to handle the MSE. While, the MSE for the validation sets is still a little bit higher than the MSE for the training sets, which implied that the model was a little bit overfitting.
 
 To combat the overfitting, I modified the model and added two dropout layers after the Flatten layer.
 
-Then I ...
+Also, I have to tune the steering angle correction for left and right camera to reduce the MSE and make the vehicle drive smoother and more robust in the center of the lane.
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track. To improve the driving behavior in these cases, I used some augmentation methods including: brightness augmentation, image translation and flipping.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
@@ -136,15 +138,18 @@ Then I recorded one counter-clockwise lap around the track to help the model to 
 
 ![reverse image][image6]
 
-To augment the data sat, I also flipped images and angles thinking that this would increase the size of the training set and helping with the left turn bias. For example, here is an image that has then been flipped:
+To augment the data sat, I also flipped images and angles thinking that this would increase the size of the training set and helping with the left turn bias. For example, here is an example that has then been flipped:
 
 ![flipped image][image7]
 ![flipped image][image8]
 
-Also, I randomly changed the brightness and of the image to
+Also, I changed the brightness and translated (horizontal shift) the image randomly to generated more training sets, which is like the following example:
+
+![Augmented image][image9]
+![Augmented image][image10]
 
 I finally randomly shuffled the data set and put 10% of the data into a validation set.
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.The final MSE result for training sets and validations sets is shown below:
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I used an adam optimizer so that manually training the learning rate wasn't necessary. The final MSE result for training sets and validations sets is shown below:
 
-![MSE][image9]
+![MSE][image11]
